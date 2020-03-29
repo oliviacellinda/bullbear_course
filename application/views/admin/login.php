@@ -1,19 +1,11 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Admin - Login</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    
-    <link rel="stylesheet" href="<?=base_url('assets/AdminLTE-3.0.1/plugins/fontawesome-free/css/all.min.css');?>">
-    <link rel="stylesheet" href="<?=base_url('assets/AdminLTE-3.0.1/dist/css/adminlte.min.css');?>">
-    <link rel="stylesheet" href="<?=base_url('assets/Source_Sans_Pro/font.css');?>">
-</head>
+<?php $this->load->view('admin/partial/_head.php');?>
+
 <body class="hold-transition login-page">
     <div class="login-box">
         <div class="login-logo">
-            <b>BullBear</b>
+            <b>BullBear Course</b>
         </div>
         <div class="card">
             <div class="card-body login-card-body">
@@ -43,8 +35,65 @@
         </div>
     </div>
 
-    <script src="<?=base_url('assets/AdminLTE-3.0.1/plugins/jquery/jquery.min.js');?>"></script>
-    <script src="<?=base_url('assets/AdminLTE-3.0.1/plugins/bootstrap/js/bootstrap.bundle.min.js');?>"></script>
-    <script src="<?=base_url('assets/AdminLTE-3.0.1/dist/js/adminlte.min.js');?>"></script>
+    <?php $this->load->view('admin/partial/_script.php');?>
+
+    <script>
+        $(document).ready(function() {
+            $('input[name="username"]').focus();
+
+            $('input[name="username"]').keypress(function(event) {
+                $('#username').removeClass('has-error');
+                if(event.keyCode === 13) {
+                    event.preventDefault();
+                    $('input[name="password"]').focus();
+                }
+            });
+
+            $('input[name="password"]').keypress(function(event) {
+                $('#password').removeClass('has-error');
+            });
+
+            $('#btnLogin').click(function(event) {
+                $('#username').removeClass('is-invalid');
+                $('#password').removeClass('is-invalid');
+                $('.help-block').remove();
+
+                $('.btn').addClass('disabled');
+                $('.btn').html('<i class="fas fa-spinner fa-pulse"></i>');
+
+                let username = $('input[name="username"]').val();
+                let password = $('input[name="password"]').val();
+
+                if(username != '' && password != '') {
+                    $.ajax({
+                        type    : 'post',
+                        url     : '<?=base_url('admin/credential/prosesLogin');?>',
+                        dataType: 'json',
+                        data    : {
+                            username : username,
+                            password : password
+                        },
+                        success : function(response) {
+                            if(response == 'username tidak ada' || response == 'password salah') {
+                                $('.help-block').remove();
+                                $('form').append('<span class="help-block" style="color:#a94442">Username atau password Anda salah!</span>');
+                                $('#username').addClass('is-invalid');
+                                $('#password').addClass('is-invalid');
+                                $('input[name="username"]').focus();
+                                $('.btn').removeClass('disabled');
+                                $('.btn').text('Sign In');
+                            }
+                            else if(response == 'berhasil') {
+                                window.location = '<?=base_url('admin/member')?>';
+                            }
+                        },
+                        error   : function(response) {
+                            console.log(response.responseText);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>

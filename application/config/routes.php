@@ -55,3 +55,6 @@ $route['translate_uri_dashes'] = FALSE;
 
 
 $route['admin'] = 'admin/credential';
+
+
+$route['member'] = 'member/credential';
