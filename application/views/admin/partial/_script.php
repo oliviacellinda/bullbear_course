@@ -5,6 +5,7 @@
     <script src="<?=base_url('assets/AdminLTE-3.0.1/plugins/datatables-responsive/js/dataTables.responsive.min.js');?>"></script>
     <script src="<?=base_url('assets/AdminLTE-3.0.1/plugins/datatables-responsive/js/responsive.bootstrap4.min.js');?>"></script>
     <script src="<?=base_url('assets/AdminLTE-3.0.1/plugins/moment/moment-with-locales.min.js');?>"></script>
+    <script src="<?=base_url('assets/AdminLTE-3.0.1/plugins/select2/js/select2.full.min.js');?>"></script>
     <script src="<?=base_url('assets/AdminLTE-3.0.1/dist/js/adminlte.min.js');?>"></script>
     <script src="<?=base_url('assets/bootstrap-filestyle-2.1.0/bootstrap-filestyle.min.js');?>"></script>
     <script src="<?=base_url('assets/toastr/toastr.min.js');?>"></script>

@@ -84,6 +84,66 @@ class Transaksi extends CI_Controller {
         echo json_encode($return);
     }
 
+    public function addTransaksi() {
+        if(!$this->isLogin()) {
+            echo json_encode('User not authorized');
+            die();
+        }
+
+        $username = preg_replace('/[^a-zA-Z0-9]/', '', $this->input->post('username'));
+        $paket = preg_replace('/[^0-9]/', '', $this->input->post('paket'));
+
+        $where = array('username_member' => $username);
+        $member = $this->model->getDataWhere('member', $where);
+
+        $where = array('id_video_paket' => $paket);
+        $video_paket = $this->model->getDataWhere('video_paket', $where);
+        $member_paket = $this->model->getDataWhere('member_paket', $where);
+
+        if($member == '') {
+            $return['type'] = 'error';
+            $return['message'] = 'Member tidak ditemukan.';
+            echo json_encode($return);
+            die();
+        }
+        elseif($video_paket == '') {
+            $return['type'] = 'error';
+            $return['message'] = 'Paket tidak ditemukan.';
+            echo json_encode($return);
+            die();
+        }
+        elseif($member_paket != '') {
+            $return['type'] = 'error';
+            $return['message'] = 'Member telah memiliki paket ini.';
+            echo json_encode($return);
+            die();
+        }
+        else {
+            $data = array(
+                'invoice'           => "bbcourse_$username" . "_" . $paket . "_" . date('YmdHis'),
+                'username_member'   => $username,
+                'id_paket'          => $paket,
+                'tanggal_transaksi' => date('Y-m-d H:i:s'),
+                'tanggal_verifikasi'=> date('Y-m-d H:i:s'),
+                'status_verifikasi' => 'verified',
+                'total_pembelian'   => $video_paket['harga_paket'],
+                'sumber_pembayaran' => 'manual',
+            );
+            $this->model->insertData('transaksi', $data);
+
+            $data = array(
+                'username_member'   => $username,
+                'id_video_paket'    => $paket,
+            );
+            $this->model->insertData('member_paket', $data);
+
+            $return['type'] = 'success';
+            $return['message'] = 'Transaksi berhasil disimpan.';
+            echo json_encode($return);
+            die();
+        }
+    }
+
 
     /**
      * Section ini khusus untuk private function

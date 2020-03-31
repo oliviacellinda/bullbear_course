@@ -64,6 +64,19 @@ class Member extends CI_Controller {
         }
     }
 
+    public function searchMember() {
+        if(!$this->isLogin()) {
+            echo json_encode('User not authorized');
+            die();
+        }
+        else {
+            $search = preg_replace('/[^a-zA-Z0-9]/', '', $this->input->post('search'));
+            $data['results'] = $this->model->searchMember($search);
+            if($data['results'] == '') $data['results'] = array();
+            echo json_encode($data);
+        }
+    }
+
     private function isLogin() {
         if($this->session->bullbear_username_admin != '')
             return true;

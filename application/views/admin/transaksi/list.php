@@ -213,7 +213,10 @@
                         loading('.card');
                     },
                     success : function(data) {
-                        if(data.type == 'error') {
+                        if(!jQuery.isPlainObject(data)) {
+                            window.location = '<?=base_url('admin');?>';
+                        }
+                        else if(data.type == 'error') {
                             showAlert(data);
                         }
                         else if(data.type == 'success') {
