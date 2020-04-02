@@ -254,8 +254,8 @@ class Video extends CI_Controller {
             return $return;
         }
 
-        $this->lang->load('upload', 'indonesia');
-        $this->config->set_item('language', 'indonesia');
+        // $this->lang->load('upload', 'indonesia');
+        // $this->config->set_item('language', 'indonesia');
 
 		$config['upload_path']		= './course/thumbnail';
 		$config['allowed_types']	= 'jpg|png|jpeg';

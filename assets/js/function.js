@@ -1,7 +1,7 @@
 const base_url = {
-    index   : 'http://localhost/bullbear_library/',
-    admin   : 'http://localhost/bullbear_library/admin/',
-    member  : 'http://localhost/bullbear_library/member/',
+    index   : 'http://localhost/bullbear_course/',
+    admin   : 'http://localhost/bullbear_course/admin/',
+    member  : 'http://localhost/bullbear_course/member/',
 };
 
 const currency = new Intl.NumberFormat('id-ID', {
