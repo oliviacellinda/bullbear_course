@@ -394,6 +394,7 @@
                             $('#formVideo').trigger('reset');
                             $('#progress').hide();
                             $('#progress p').text('');
+                            $('.progress-bar').attr('aria-valuenow', 0).css('width', '0%');
                             $('.modal-footer button').prop('disabled', false);
                             $('#modalVideo').modal('hide');
                             getContent();
