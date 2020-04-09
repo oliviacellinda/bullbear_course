@@ -205,7 +205,7 @@ class Video extends CI_Controller {
             $video = $upload_data['file_name'];
         }
 
-        $where = "urutan = (SELECT MAX(urutan) FROM video_isi)";
+        $where = "urutan = (SELECT MAX(urutan) FROM video_isi WHERE id_video_paket = $id)";
         $latest = $this->model->getDataWhere('video_isi', $where);
 
         $data = array(
