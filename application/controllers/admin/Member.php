@@ -78,7 +78,7 @@ class Member extends CI_Controller {
     }
 
     private function isLogin() {
-        if($this->session->bullbear_username_admin != '')
+        if($this->session->bbcourse_username_admin != '')
             return true;
         else 
             return false;

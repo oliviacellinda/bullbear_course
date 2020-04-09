@@ -28,7 +28,7 @@ class Credential extends CI_Controller {
             die();
         }
         else {
-            $this->session->set_userdata('bullbear_username_admin', $informasi_admin['username_admin']);
+            $this->session->set_userdata('bbcourse_username_admin', $informasi_admin['username_admin']);
             echo json_encode('berhasil');
         }
     }
@@ -57,7 +57,7 @@ class Credential extends CI_Controller {
             die();
         }
         
-        $where = array('username_admin' => $this->session->bullbear_username_admin);
+        $where = array('username_admin' => $this->session->bbcourse_username_admin);
         $informasi_admin = $this->model->getDataWhere('admin', $where);
         
         if(!password_verify($lama, $informasi_admin['password_admin'])) {

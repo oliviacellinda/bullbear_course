@@ -23,7 +23,7 @@ function loadCourse(sort = 'asc', search = '', is_owner = false) {
             }
             else {
                 for(let i=0; i<data.length; i++) {
-                    let temp = $('#template')[0].innerHTML;
+                    let temp = $('#templateCard')[0].innerHTML;
                     temp = $.parseHTML(temp);
                     $(temp).find('#thumbnail img').attr('src', data[i].thumbnail_paket);
                     $(temp).find('#thumbnail').prop('href', base_url.member + 'video/content/' + data[i].id_video_paket);

@@ -28,7 +28,7 @@ class Credential extends CI_Controller {
             die();
         }
         else {
-            $this->session->set_userdata('bullbear_username_member', $informasi_member['username_member']);
+            $this->session->set_userdata('bbcourse_username_member', $informasi_member['username_member']);
             echo json_encode('berhasil');
         }
     }
@@ -57,7 +57,7 @@ class Credential extends CI_Controller {
             die();
         }
         
-        $where = array('username_member' => $this->session->bullbear_username_member);
+        $where = array('username_member' => $this->session->bbcourse_username_member);
         $informasi_member = $this->model->getDataWhere('member', $where);
         
         if(!password_verify($lama, $informasi_member['password_member'])) {

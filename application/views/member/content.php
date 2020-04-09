@@ -62,32 +62,18 @@
                         <?php if($content != '') : ?>
 
                             <?php if($is_owner) : ?>
-                                <div class="col-md-4 d-none d-md-block">
-                                    <div class="list-group">
-                                        <?php for($i=0; $i<count($content); $i++) : ?>
-                                            <button type="button" class="list-group-item list-group-item-action" data-id="<?=$content[$i]['id_video'];?>" data-file="<?=$content[$i]['file_video'];?>">
-                                                <?=$content[$i]['nama_video'];?>
-                                                <span class="duration"><?=$content[$i]['durasi_video'];?></span>
-                                            </button>
-                                        <?php endfor; ?>
-                                    </div>
+                                <div class="col-md-4 d-none d-md-block px-0">
+                                    <div class="list-group"></div>
                                 </div>
-                                <div class="col-md-8">
+                                <div class="col-md-8 pl-md-4">
                                     <video id="player" class="video-js vjs-fluid vjs-theme-fantasy" oncontextmenu="return false;" controls preload="none" data-setup="{}">
                                         <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that supports HTML5 video</p>
                                     </video>
                                 </div>
                                 <div class="col-12 d-block d-md-none mt-3">
-                                    <div class="list-group">
-                                        <?php for($i=0; $i<count($content); $i++) : ?>
-                                            <button type="button" class="list-group-item list-group-item-action" data-id="<?=$content[$i]['id_video'];?>" data-file="<?=$content[$i]['file_video'];?>">
-                                                <?=$content[$i]['nama_video'];?>
-                                                <span class="duration"><?=$content[$i]['durasi_video'];?></span>
-                                            </button>
-                                        <?php endfor; ?>
-                                    </div>
+                                    <div class="list-group"></div>
                                 </div>
-
+                                
                             <?php else : ?>
                                 <div class="col-12 col-sm-10 col-md-8 mx-auto">
                                     <div class="list-group">
@@ -127,35 +113,134 @@
         <script>
             var uri = window.location.href.split('/');
             var player = videojs('player');
+            var progress;
 
             function loadVideo(data) {
-                $('.list-group-item').removeClass('active');
+                $(document).find('.list-group-item').removeClass('active');
                 $('.list-group').each(function() {
                     $(this).find('.list-group-item').eq(data.index).addClass('active');
                 });
                 player.src([
                     {type: 'video/mp4', src: base_url.index + 'course/content/' + uri[uri.length-1] + '/' + data.file}
                 ]);
+                $('video').data('id', data.id);
+                $('video').data('order', data.order);
+            }
+
+            function loadList() {
+                return $.ajax({
+                    type    : 'post',
+                    url     : '<?=base_url('member/video/getContentList');?>',
+                    dataType: 'json',
+                    data    : { id: uri[uri.length-1] },
+                    beforeSend: function() {
+                        loading('.list-group');
+                    },
+                    success : function(data) {
+                        if(!jQuery.isPlainObject(data)) {
+                            window.location = '<?=base_url('member');?>';
+                        }
+                        else if(data.type == 'success') {
+                            $('.list-group').empty();
+
+                            data = JSON.parse(data.message);
+                            progress = data.progress;
+                            data.content.forEach(element => {
+                                let button = $('<button></button>').addClass(['list-group-item', 'list-group-item-action', 'd-flex', 'justify-content-between', 'align-items-center']);
+                                let div = $('<div></div>').addClass('d-flex-row');
+                                let name = $('<span></span>').text(element.nama_video);
+                                let duration = $('<span></span>').addClass('duration').text(element.durasi_video);
+                                div.append(name).append(duration);
+                                button.append(div);
+                                button.data('id', element.id_video);
+                                button.data('file', element.file_video);
+                                button.data('order', element.urutan);
+
+                                if(parseInt(element.urutan) > parseInt(data.progress)) {
+                                    button.prop('disabled', true);
+                                    let lock = $('<div></div>').addClass('d-flex-row');
+                                    lock.append($('<i></i>').addClass(['fas', 'fa-fw', 'fa-lock']));
+                                    button.append(lock);
+                                }
+                                
+                                $('.list-group').append(button);
+                            });
+                            
+                            removeLoading('.list-group');
+                        }
+                        else {
+                            $('.list-group').empty();
+                            showAlert(data);
+                        }
+                    },
+                    error   : function() {
+                        $('.list-group').empty();
+                        toastr.error('Failed loading content list.', 'Error!');
+                    },
+                    complete: function() {
+                        removeLoading('.list-group');
+                    }
+                });
             }
 
             function markFirst() {
                 let first = new Object();
-                first.id = $('.list-group-item:first').data('id');
-                first.file = $('.list-group-item:first').data('file');
+                first.id = $(document).find('.list-group-item:first').data('id');
+                first.file = $(document).find('.list-group-item:first').data('file');
+                first.order = $(document).find('.list-group-item:first').data('order');
                 first.index = 0;
                 loadVideo(first);
             }
 
+            function updateProgress() {
+                return $.ajax({
+                    type    : 'post',
+                    url     : '<?=base_url('member/video/updateProgress');?>',
+                    dataType: 'json',
+                    data    : { id: $('video').data('id') },
+                    beforeSend: function() {
+                        loading('.list-group');
+                    },
+                    success : function(response) {
+                        if(!jQuery.isPlainObject(response)) {
+                            window.location = '<?=base_url('member');?>';
+                        }
+                        else {
+                            showAlert(response);
+                        }
+                    },
+                    error   : function(e) {
+                        console.log(e.responseText);
+                        toastr.error('Failed updating progress.', 'Error!');
+                    }
+                });
+            }
+
             $(document).ready(function() {
-                markFirst();
+                loadList().then(function() {
+                    markFirst();
+                });
 
                 $('.list-group').on('click', '.list-group-item', function() {
                     let data = new Object();
                     data.id = $(this).data('id');
                     data.file = $(this).data('file');
+                    data.order = $(this).data('order');
                     data.index = $(this).index();
                     loadVideo(data);
                 });
+
+                player.on('ended', function() {
+                    if($('video').data('order') == progress) {
+                        let current = $(document).find('.list-group-item.active').index();
+                        updateProgress().then(function() {
+                            loadList().then(function() {
+                                $(document).find('.list-group-item').eq(current).addClass('active');
+                            });
+                        });
+                    }
+                });
+
             });
         </script>
 

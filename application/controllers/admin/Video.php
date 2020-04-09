@@ -78,13 +78,24 @@ class Video extends CI_Controller {
     }
 
     public function getContent($id) {
-        $id = preg_replace('/[^0-9]/', '', $id);
-        $where = array('id_video_paket' => $id);
-        $isi = $this->model->getAllDataWhere('video_isi', $where);
-        echo json_encode($isi);
+        if(!$this->isLogin()) {
+            echo json_encode('User not authorized');
+            die();
+        }
+        else {
+            $id = preg_replace('/[^0-9]/', '', $id);
+            $where = array('id_video_paket' => $id);
+            $isi = $this->model->getDataWhereOrderBy('video_isi', $where, 'urutan ASC');
+            echo json_encode(($isi == '') ? [] : $isi);
+        }
     }
 
     public function addPaket() {
+        if(!$this->isLogin()) {
+            echo json_encode('User not authorized');
+            die();
+        }
+
         $data = $this->getDataVideo('tambah');
 
         if($data['type'] === 'error') {
@@ -101,6 +112,11 @@ class Video extends CI_Controller {
     }
 
     public function editPaket() {
+        if(!$this->isLogin()) {
+            echo json_encode('User not authorized');
+            die();
+        }
+
         $id = preg_replace('/[^0-9]/', '', $this->input->post('id'));
         $where = array('id_video_paket' => $id);
         $informasi_video = $this->model->getDataWhere('video_paket', $where);
@@ -139,7 +155,12 @@ class Video extends CI_Controller {
         }
     }
 
-    public function addKonten() {
+    public function addContent() {
+        if(!$this->isLogin()) {
+            echo json_encode('User not authorized');
+            die();
+        }
+
         $id = preg_replace('/[^0-9]/', '', $this->input->post('id'));
         $judul = trim($this->input->post('judul'));
         $judul = htmlspecialchars(strip_tags($judul), ENT_QUOTES);
@@ -184,8 +205,12 @@ class Video extends CI_Controller {
             $video = $upload_data['file_name'];
         }
 
+        $where = "urutan = (SELECT MAX(urutan) FROM video_isi)";
+        $latest = $this->model->getDataWhere('video_isi', $where);
+
         $data = array(
             'id_video_paket'=> $id,
+            'urutan'        => $latest['urutan'] + 1,
             'nama_video'    => $judul,
             'file_video'    => $video,
             'durasi_video'  => $durasi,
@@ -197,7 +222,12 @@ class Video extends CI_Controller {
         echo json_encode($return);
     }
 
-    public function deleteKonten() {
+    public function deleteContent() {
+        if(!$this->isLogin()) {
+            echo json_encode('User not authorized');
+            die();
+        }
+
         $id = preg_replace('/[^0-9]/', '', $this->input->post('id'));
         $where = array('id_video' => $id);
         $informasi_video = $this->model->getDataWhere('video_isi', $where);
@@ -215,6 +245,15 @@ class Video extends CI_Controller {
 
             $this->model->deleteData('video_isi', $where);
 
+            $list_lama = $this->model->getAllDataWhere('video_isi', 'urutan > '.$informasi_video['urutan']);
+            if($list_lama != '') {
+                for($i=0; $i<count($list_lama); $i++) {
+                    $data = ['urutan' => $list_lama[$i]['urutan'] - 1];
+                    $where = ['id_video' => $list_lama[$i]['id_video']];
+                    $this->model->updateData('video_isi', $where, $data);
+                }
+            }
+
             $return['type'] = 'success';
             $return['message'] = 'Berhasil menghapus data.';
             echo json_encode($return);
@@ -226,13 +265,66 @@ class Video extends CI_Controller {
         }
     }
 
+    public function updateContentOrder() {
+        if(!$this->isLogin()) {
+            echo json_encode('User not authorized');
+            die();
+        }
+        else {
+            $id = preg_replace('/[^0-9]/', '', $this->input->post('id'));
+            $list = json_decode($this->input->post('list'));
+            for($i=0; $i<count($list); $i++) $list[$i] = preg_replace('/[^0-9]/', '', $list[$i]);
+
+            $paket = $this->model->getDataWhere('video_paket', ['id_video_paket' => $id]);
+            if($paket == '') {
+                $return['type'] = 'error';
+                $return['message'] = 'Data paket video tidak ditemukan.';
+                echo json_encode($return);
+                die();
+            }
+
+            $konten = $this->model->getAllDataWhere('video_isi', ['id_video_paket' => $id]);
+            if($konten == '') {
+                $return['type'] = 'error';
+                $return['message'] = 'Data isi paket video tidak ditemukan.';
+                echo json_encode($return);
+                die();
+            }
+
+            $konten_id = array_column($konten, 'id_video');
+            if(count($list) != count($konten_id)) {
+                $return['type'] = 'error';
+                $return['message'] = 'Data isi paket video tidak sesuai.';
+                echo json_encode($return);
+                die();
+            }
+            for($i=0; $i<count($list); $i++) {
+                if(!in_array($list[$i], $konten_id)) {
+                    $return['type'] = 'error';
+                    $return['message'] = 'Data isi paket video tidak sesuai.';
+                    echo json_encode($return);
+                    die();
+                }
+            }
+
+            for($i=0; $i<count($list); $i++) {
+                $data = ['urutan' => $i+1];
+                $where = ['id_video' => $list[$i]];
+                $this->model->updateData('video_isi', $where, $data);
+            }
+            $return['type'] = 'success';
+            $return['message'] = 'Urutan video berhasil diubah.';
+            echo json_encode($return);
+        }
+    }
+
 
     /**
      * Section ini khusus untuk private function
      */
 
     private function isLogin() {
-        if($this->session->bullbear_username_admin != '')
+        if($this->session->bbcourse_username_admin != '')
             return true;
         else 
             return false;

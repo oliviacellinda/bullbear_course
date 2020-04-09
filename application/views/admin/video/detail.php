@@ -102,10 +102,16 @@
                                 <div class="card-header">
                                     <div class="d-flex justify-content-between">
                                         <h3 class="card-title">Daftar Konten</h3>
-                                        <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalVideo">
-                                            <i class="fas fa-fw fa-plus"></i>
-                                            Tambah Video
-                                        </button>
+                                        <div class="d-flex-row">
+                                            <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalVideo">
+                                                <i class="fas fa-fw fa-plus"></i>
+                                                Tambah Video
+                                            </button>
+                                            <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#modalUrutan">
+                                                <i class="fas fa-fw fa-cog"></i>
+                                                Edit Urutan
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="card-body">
@@ -211,6 +217,26 @@
         </div>
     </div>
 
+    <div id="modalUrutan" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ubah Urutan Video</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    	<span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="todo-list" data-widget="todo-list"></ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                    <button type="button" class="btn btn-primary" id="btnSimpanUrutan">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <?php $this->load->view('admin/partial/_modal_password'); ?>
 
     <?php $this->load->view('admin/partial/_script.php'); ?>
@@ -218,8 +244,17 @@
     <script>
         var table;
 
+        function initListOrderable() {
+            $('.todo-list').sortable({
+                placeholder         : 'sort-highlight',
+                handle              : '.handle',
+                forcePlaceholderSize: true,
+                zIndex              : 999999
+            });
+        }
+
         function getContent() {
-            $.ajax({
+            return $.ajax({
                 type    : 'post',
                 url     : '<?=base_url('admin/video/getContent/'.$video['id_video_paket']);?>',
                 dataType: 'json',
@@ -227,26 +262,40 @@
                     showEllipsis('.list-group');
                 },
                 success : function(data) {
-                    $('.ellipsis').remove();
+                    $('.list-group').empty();
+                    $('.todo-list').empty();
 
-                    if(data != null && data.length != 0) {
-                        let li = '';
+                    if(!jQuery.isPlainObject) {
+                        window.location = '<?=base_url('admin');?>';
+                    }
+                    else if(data.length != 0) {
                         for(let i=0; i<data.length; i++) {
-                            li += '<li class="list-group-item d-flex justify-content-between align-items-center">' +
-                                '<div class="d-flex-row">' +
-                                    data[i].nama_video +
-                                    '<span class="duration">'+data[i].durasi_video+'</span>' +
-                                '</div>' +
-                                '<span type="button" class="btn-icon-only badge badge-danger badge-pill" data-id="'+data[i].id_video+'">' +
-                                    '<i class="fa fa-times"></i>'
-                                '</span>' +
-                            '</li>';
+                            let li = $('<li></li>').addClass(['list-group-item', 'd-flex', 'justify-content-between', 'align-items-center']);
+                            let div = $('<div></div>').addClass('d-flex-row').text(data[i].nama_video);
+                            div.append($('<span></span>').addClass('duration').text(data[i].durasi_video));
+                            let button = $('<span></span>').addClass(['btn-icon-only', 'badge', 'badge-danger', 'badge-pill']);
+                            button.attr('type', 'button');
+                            button.data('id', data[i].id_video);
+                            button.append($('<i></i>').addClass(['fas', 'fa-times']));
+                            li.append(div).append(button);
+                            $('.list-group').append(li);
+
+                            li = $('<li></li>');
+                            let handle = $('<span></span>').addClass('handle');
+                            handle.append($('<i></i>').addClass(['fas', 'fa-ellipsis-v'])).append($('<i></i>').addClass(['fas', 'fa-fw', 'fa-ellipsis-v']));
+                            let text = $('<span></span>').addClass('text').text(data[i].nama_video);
+                            li.append(handle).append(text);
+                            li.data('id', data[i].id_video);
+                            $('.todo-list').append(li);
                         }
-                        $('.list-group').html(li);
+                        
+                        initListOrderable();
                     }
                     else {
                         $('.list-group').html('<span>Tidak ada data.</span>');
                     }
+
+                    removeEllipsis('.list-group');
                 },
             });
         }
@@ -314,7 +363,10 @@
                             loading('.modal-body');
                         },
                         success : function(response) {
-                            if(response.type == 'success') {
+                            if(!jQuery.isPlainObject(response)) {
+                                window.location = '<?=base_url('admin');?>';
+                            }
+                            else if(response.type == 'success') {
                                 window.location = '<?=base_url('admin/video/detail/');?>' + id;
                             }
                             else {
@@ -374,7 +426,7 @@
                             return xhr;
                         },
                         type    : 'post',
-                        url     : '<?=base_url('admin/video/addKonten');?>',
+                        url     : '<?=base_url('admin/video/addContent');?>',
                         dataType: 'json',
                         data    : formData,
                         contentType : false,
@@ -384,8 +436,13 @@
                             $('#progress p').text('Uploading files...');
                             $('.modal-footer button').prop('disabled', true);
                         },
-                        success : function(data) {
-                            showAlert(data);
+                        success : function(response) {
+                            if(!jQuery.isPlainObject(response)) {
+                                window.location = '<?=base_url('admin');?>';
+                            }
+                            else {
+                                showAlert(response);
+                            }
                         },
                         error   : function(e) { console.log(e.responseText);
                             toastr.error('Gagal menyimpan data.', 'Error!');
@@ -406,22 +463,63 @@
                 });
             });
 
+            $('#btnSimpanUrutan').click(function() {
+                let uri = window.location.href.split('/');
+
+                let list = new Array();
+                $('.todo-list').children().each(function() {
+                    list.push($(this).data('id'));
+                });
+                
+                $.ajax({
+                    type    : 'post',
+                    url     : '<?=base_url('admin/video/updateContentOrder');?>',
+                    dataType: 'json',
+                    data    : { id: uri[uri.length-1], list: JSON.stringify(list) },
+                    beforeSend: function() {
+                        loading('.modal-body');
+                    },
+                    success : function(response) {
+                        if(!jQuery.isPlainObject(response)) {
+                            window.location = '<?=base_url('admin');?>';
+                        }
+                        else {
+                            showAlert(response);
+                        }
+                    },
+                    error   : function(e) {
+                        console.log(e.responseText);
+                        toastr.error('Gagal mengubah urutan video.', 'Error!');
+                    },
+                    complete: function() {
+                        removeLoading('.modal-body');
+                        getContent();
+                    }
+                })
+            });
+
             $(document).on('click', '.btn-icon-only', function() {
                 let id = $(this).data('id');
                 
                 if( confirm('Apakah Anda yakin ingin menghapus data ini?') ) {
                     $.ajax({
                         type    : 'post',
-                        url     : '<?=base_url('admin/video/deleteKonten');?>',
+                        url     : '<?=base_url('admin/video/deleteContent');?>',
                         dataType: 'json',
                         data    : { id : id },
                         beforeSend: function() {
                             loading('.card');
                         },
-                        success : function(data) {
-                            showAlert(data);
+                        success : function(response) {
+                            if(!jQuery.isPlainObject(response)) {
+                                window.location = '<?=base_url('admin');?>';
+                            }
+                            else {
+                                showAlert(response);
+                            }
                         },
                         error   : function(e) {
+                            console.log(e.responseText);
                             toastr.error('Gagal menghapus data.', 'Error!');
                         },
                         complete: function() {

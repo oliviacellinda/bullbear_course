@@ -23,7 +23,7 @@ class Transaction extends CI_Controller {
 
     public function index() {
         if(!$this->isLogin()) {
-            redirect('member');
+            redirect(base_url('member'));
         }
         else {
             $this->load->view('member/transaksi');
@@ -46,7 +46,7 @@ class Transaction extends CI_Controller {
                              nama_paket, deskripsi_singkat, thumbnail_paket
                       FROM transaksi
                       LEFT JOIN video_paket ON transaksi.id_video_paket = video_paket.id_video_paket 
-                      WHERE username_member = '" . $this->session->bullbear_username_member . "' ";
+                      WHERE username_member = '" . $this->session->bbcourse_username_member . "' ";
 
             $datatables = new Datatables(new CodeigniterAdapter);
             $datatables->query($query);
@@ -92,7 +92,7 @@ class Transaction extends CI_Controller {
         
         $transaksi = array(
             'invoice'           => $invoice,
-            'username_member'   => $this->session->bullbear_username_member,
+            'username_member'   => $this->session->bbcourse_username_member,
             'id_video_paket'    => $id,
             'total_pembelian'   => $paket['harga_paket'],
         );
@@ -270,14 +270,14 @@ class Transaction extends CI_Controller {
      */
 
     private function isLogin() {
-        if($this->session->bullbear_username_member != '')
+        if($this->session->bbcourse_username_member != '')
             return true;
         else 
             return false;
     }
 
     private function getInvoice($id) {
-        $username = $this->session->bullbear_username_member;
+        $username = $this->session->bbcourse_username_member;
         $date = date('YmdHis');
         return 'bbcourse_' . $username . '_' . $id . '_' . $date;
     }

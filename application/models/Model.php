@@ -27,6 +27,14 @@ class Model extends CI_Model {
             return $query->row_array();
     }
 
+    public function getDataWhereOrderBy($table, $where, $order) {
+        $this->db->where($where);
+        $this->db->order_by($order);
+        $query = $this->db->get($table);
+        if($query->num_rows() > 0)
+            return $query->result_array();
+    }
+
     public function insertData($table, $data) {
         $this->db->insert($table, $data);
     }
@@ -46,7 +54,7 @@ class Model extends CI_Model {
 
     public function getContent($search, $sort, $is_owner) {
         // List library yang dimiliki member
-        $this->db->where('username_member', $this->session->bullbear_username_member);
+        $this->db->where('username_member', $this->session->bbcourse_username_member);
         $query = $this->db->get('member_paket');
         $list = [];
         if($query->num_rows() > 0) {

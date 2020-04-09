@@ -10,7 +10,7 @@ class Home extends CI_Controller {
 
     public function index() {
         if(!$this->isLogin()) {
-            redirect('member');
+            redirect(base_url('member'));
         }
         else {
             $this->load->view('member/home');
@@ -18,7 +18,7 @@ class Home extends CI_Controller {
     }
 
     private function isLogin() {
-        if($this->session->bullbear_username_member != '')
+        if($this->session->bbcourse_username_member != '')
             return true;
         else 
             return false;

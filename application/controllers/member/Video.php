@@ -15,7 +15,7 @@ class Video extends CI_Controller {
 
     public function index() {
         if(!$this->isLogin()) {
-            redirect('member');
+            redirect(base_url('member'));
         }
         else {
             $this->load->view('member/video');
@@ -24,7 +24,7 @@ class Video extends CI_Controller {
 
     public function content($id) {
         if(!$this->isLogin()) {
-            redirect('member');
+            redirect(base_url('member'));
         }
         else {
             $id = preg_replace('/[^0-9]/', '', $id);
@@ -32,7 +32,7 @@ class Video extends CI_Controller {
             $data['video'] = $this->model->getDataWhere('video_paket', $where);
             $data['content'] = $this->model->getAllDataWhere('video_isi', $where);
 
-            $where = array('username_member' => $this->session->bullbear_username_member, 'id_video_paket' => $id);
+            $where = array('username_member' => $this->session->bbcourse_username_member, 'id_video_paket' => $id);
             $data['is_owner'] = ($this->model->getDataWhere('member_paket', $where) == '') ? false : true;
 
             $transaksi = $this->model->getDataWhere('transaksi', $where);
@@ -76,13 +76,115 @@ class Video extends CI_Controller {
         }
     }
 
+    public function getContentList() {
+        if(!$this->isLogin()) {
+            echo json_encode('User not authorized');
+            die();
+        }
+        else {
+            $id = preg_replace('/[^0-9]/', '', $this->input->post('id'));
+
+            $paket = $this->model->getDataWhere('video_paket', ['id_video_paket' => $id]);
+            if($paket == '') {
+                $return['type'] = 'error';
+                $return['message'] = 'Course not found.';
+                echo json_encode($return);
+                die();
+            }
+
+            $isi = $this->model->getDataWhereOrderBy('video_isi', ['id_video_paket' => $id], 'urutan ASC');
+            if($isi != '') {
+                $where = array(
+                    'username_member'   => $this->session->bbcourse_username_member,
+                    'id_video_paket'    => $id,
+                );
+                $progress = $this->model->getDataWhere('member_paket', $where);
+
+                if($progress != '') {
+                    if($progress['current_progress'] > count($isi)) {
+                        $data = ['current_progress' => count($isi)];
+                        $this->model->updateData('member_paket', $where, $data);
+                        $progress['current_progress'] = count($isi);
+                    }
+
+                    $return['type'] = 'success';
+                    $return['message'] = json_encode(['content' => $isi, 'progress' => $progress['current_progress']]);
+                    echo json_encode($return);
+                }
+                else {
+                    $return['type'] = 'error';
+                    $return['message'] = 'You do not have access to this course.';
+                    echo json_encode($return);
+                }
+            }
+            else {
+                $return['type'] = 'info';
+                $return['message'] = 'No data.';
+                echo json_encode($return);
+            }
+        }
+    }
+
+    public function updateProgress() {
+        if(!$this->isLogin()) {
+            echo json_encode('User not authorized');
+            die();
+        }
+        else {
+            $id = preg_replace('/[^0-9]/', '', $this->input->post('id'));
+
+            $video = $this->model->getDataWhere('video_isi', ['id_video' => $id]);
+            if($video == '') {
+                $return['type'] = 'error';
+                $return['message'] = 'Course not found.';
+                echo json_encode($return);
+                die();
+            }
+
+            $where = array(
+                'username_member'   => $this->session->bbcourse_username_member,
+                'id_video_paket'    => $video['id_video_paket'],
+            );
+            $member_paket = $this->model->getDataWhere('member_paket', $where);
+            if($member_paket == '') {
+                $return['type'] = 'error';
+                $return['message'] = 'You do not have access to this course.';
+                echo json_encode($return);
+                die();
+            }
+
+            $where = array(
+                'id_video_paket'=> $video['id_video_paket'],
+                'urutan'        => $video['urutan'] + 1,
+            );
+            $next = $this->model->getDataWhere('video_isi', $where);
+            if($next == '') {
+                $return['type'] = 'info';
+                $return['message'] = 'You have reached the end of the course.';
+                echo json_encode($return);
+            }
+            else {
+                $data = ['current_progress' => $video['urutan'] + 1];
+                $where = array(
+                    'username_member'   => $this->session->bbcourse_username_member,
+                    'id_video_paket'    => $video['id_video_paket'],
+                );
+                $this->model->updateData('member_paket', $where, $data);
+
+                $return['type'] = 'success';
+                $return['message'] = 'Successfully updated progress.';
+                echo json_encode($return);
+            }
+        }
+    }
+
 
     /**
      * Section ini khusus untuk private function
      */
 
     private function isLogin() {
-        if($this->session->bullbear_username_member != '')
+        if($this->session->bbcourse_username_member != '')
             return true;
         else 
             return false;

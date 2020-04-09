@@ -1,4 +1,5 @@
     <script src="<?=base_url('assets/AdminLTE-3.0.1/plugins/jquery/jquery.min.js');?>"></script>
+    <script src="<?=base_url('assets/AdminLTE-3.0.1/plugins/jquery-ui/jquery-ui.min.js');?>"></script>
     <script src="<?=base_url('assets/AdminLTE-3.0.1/plugins/bootstrap/js/bootstrap.bundle.min.js');?>"></script>
     <script src="<?=base_url('assets/AdminLTE-3.0.1/plugins/datatables/jquery.dataTables.min.js');?>"></script>
     <script src="<?=base_url('assets/AdminLTE-3.0.1/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js');?>"></script>

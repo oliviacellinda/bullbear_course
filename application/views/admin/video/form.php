@@ -130,7 +130,10 @@
                             loading('.card');
                         },
                         success : function(response) {
-                            if(response.type == 'success') {
+                            if(!jQuery.isPlainObject(response)) {
+                                window.location = '<?=base_url('admin');?>';
+                            }
+                            else if(response.type == 'success') {
                                 window.location = response.message;
                             }
                             else {

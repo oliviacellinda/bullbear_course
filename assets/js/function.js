@@ -21,10 +21,13 @@ function removeLoading(element) {
 
 function showAlert(data) {
     if(data.type == 'success') {
-        toastr.success(data.message, 'Sukses!');
+        toastr.success(data.message, 'Success!');
     }
     else if(data.type == 'error') {
         toastr.error(data.message, 'Error!');
+    }
+    else if(data.type == 'info') {
+        toastr.info(data.message, 'Information');
     }
 }
 

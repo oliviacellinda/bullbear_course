@@ -84,7 +84,7 @@
         });
     </script>
 
-    <script id="template" type="text/html">
+    <script id="templateCard" type="text/html">
         <div class="col-sm-6 col-md-4 pb-3">
             <div class="card h-100">
                 <a href="" id="thumbnail">
