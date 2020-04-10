@@ -2,26 +2,6 @@
 <html>
 <?php $this->load->view('member/partial/_head.php');?>
 
-<style>
-    .divider {
-        width: 100%;
-        margin: .7em auto;
-        overflow: hidden;
-        text-align: center;
-    }
-    .divider:before, .divider:after {
-        content: '';
-        display: inline-block;
-        border-bottom: 1px solid #6c757d;
-        vertical-align: middle;
-        width: 50%;
-        margin: 0 .5em 0 -50%;
-    }
-    .divider:after {
-        margin: 0 -50% 0 .5em;
-    }
-</style>
-
 <body class="hold-transition login-page">
     <div class="login-box">
         <div class="login-logo">
@@ -29,7 +9,7 @@
         </div>
         <div class="card">
             <div class="card-body login-card-body">
-                <p class="login-box-msg">Sign in to continue</p>
+                <p class="login-box-msg">Register a new account</p>
                 <form autocomplete="off">
                     <div class="input-group mb-3">
                         <input type="text" class="form-control" name="username" id="username" placeholder="Username">
@@ -47,15 +27,25 @@
                             </div>
                         </div>
                     </div>
+                    <div class="input-group mb-3">
+                        <input type="email" class="form-control" name="email" id="email" placeholder="Email">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-at"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" name="name" id="name" placeholder="Name">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-id-card"></span>
+                            </div>
+                        </div>
+                    </div>
                 </form>
                 <div class="text-center mb-3">
-                    <button id="btnLogin" class="btn btn-block btn-primary">Sign In</button>
-                </div>
-                <div class="text-center">
-                    <h6 class="divider">OR</h6>
-                </div>
-                <div class="text-center mb-3">
-                    <a href="<?=base_url('member/credential/register');?>" class="btn btn-block btn-dark">Sign Up</a>
+                    <button id="btnSubmit" class="btn btn-block btn-primary">Submit</button>
                 </div>
             </div>
         </div>
@@ -67,21 +57,11 @@
         $(document).ready(function() {
             $('input[name="username"]').focus();
 
-            $('input[name="username"]').keypress(function(event) {
-                $('#username').removeClass('has-error');
-                if(event.keyCode === 13) {
-                    event.preventDefault();
-                    $('input[name="password"]').focus();
-                }
-            });
-
-            $('input[name="password"]').keypress(function(event) {
-                $('#password').removeClass('has-error');
-            });
-
-            $('#btnLogin').click(function(event) {
+            $('#btnSubmit').click(function(event) {
                 $('#username').removeClass('is-invalid');
                 $('#password').removeClass('is-invalid');
+                $('#email').removeClass('is-invalid');
+                $('#name').removeClass('is-invalid');
                 $('.help-block').remove();
 
                 $('.btn').addClass('disabled');
@@ -89,27 +69,33 @@
 
                 let username = $('input[name="username"]').val();
                 let password = $('input[name="password"]').val();
+                let email = $('input[name="email"]').val();
+                let name = $('input[name="name"]').val();
 
-                if(username != '' && password != '') {
+                if(username != '' && password != '' && email != '' && name != '') {
                     $.ajax({
                         type    : 'post',
-                        url     : '<?=base_url('member/credential/prosesLogin');?>',
+                        url     : '<?=base_url('member/credential/prosesRegister');?>',
                         dataType: 'json',
                         data    : {
                             username : username,
-                            password : password
+                            password : password,
+                            email    : email,
+                            name     : name,
                         },
                         success : function(response) {
-                            if(response == 'username tidak ada' || response == 'password salah') {
+                            if(response.type == 'error') {
                                 $('.help-block').remove();
-                                $('form').append('<span class="help-block" style="color:#a94442">Username atau password Anda salah!</span>');
+                                $('form').append('<span class="help-block" style="color:#a94442">'+response.message+'</span>');
                                 $('#username').addClass('is-invalid');
                                 $('#password').addClass('is-invalid');
+                                $('#email').addClass('is-invalid');
+                                $('#name').addClass('is-invalid');
                                 $('input[name="username"]').focus();
                                 $('.btn').removeClass('disabled');
-                                $('.btn').text('Sign In');
+                                $('.btn').text('Submit');
                             }
-                            else if(response == 'berhasil') {
+                            else if(response.type == 'success') {
                                 window.location = '<?=base_url('member/home')?>';
                             }
                         },

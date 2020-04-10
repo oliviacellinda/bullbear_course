@@ -9,7 +9,21 @@ class Credential extends CI_Controller {
     }
 
     public function index() {
-        $this->load->view('member/login');
+        if($this->isLogin()) {
+            redirect(base_url('member/home'));
+        }
+        else {
+            $this->load->view('member/login');
+        }
+    }
+
+    public function register() {
+        if($this->isLogin()) {
+            redirect(base_url('member/home'));
+        }
+        else {
+            $this->load->view('member/register');
+        }
     }
 
     public function prosesLogin() {
@@ -31,6 +45,83 @@ class Credential extends CI_Controller {
             $this->session->set_userdata('bbcourse_username_member', $informasi_member['username_member']);
             echo json_encode('berhasil');
         }
+    }
+
+    public function prosesRegister() {
+        $username = $this->input->post('username');
+        $password = $this->input->post('password');
+        $email = $this->input->post('email');
+        $name = $this->input->post('name');
+
+        if($username == '' || $password == '' || $email == '' || $name == '') {
+            $return['type'] = 'error';
+            $return['message'] = 'Data is not complete.';
+            echo json_encode($return);
+            die();
+        }
+
+        if(!ctype_alnum($username)) {
+            $return['type'] = 'error';
+            $return['message'] = 'Username can only contain letters and numbers.';
+            echo json_encode($return);
+            die();
+        }
+
+        if(strlen($password) < 8) {
+            $return['type'] = 'error';
+            $return['message'] = 'The minimum length of password is 8 characters.';
+            echo json_encode($return);
+            die();
+        }
+
+        if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $return['type'] = 'error';
+            $return['message'] = 'Invalid email format.';
+            echo json_encode($return);
+            die();
+        }
+
+        if (!preg_match("/^[a-zA-Z ]/", $name)) {
+            $return['type'] = 'error';
+            $return['message'] = 'Name can only contain letters and white space.';
+            echo json_encode($return);
+            die();
+        }
+
+        $username = trim($username);
+        $password = trim($password);
+        $email = trim($email);
+        $name = trim($name);
+
+        $where = array('username_member' => $username);
+        $informasi_member = $this->model->getDataWhere('member', $where);
+        if($informasi_member != '') {
+            $return['type'] = 'error';
+            $return['message'] = 'Username is already used.';
+            echo json_encode($return);
+            die();
+        }
+
+        $where = array('email_member' => $email);
+        $informasi_member = $this->model->getDataWhere('member', $where);
+        if($informasi_member != '') {
+            $return['type'] = 'error';
+            $return['message'] = 'Email is already used.';
+            echo json_encode($return);
+            die();
+        }
+
+        $data = array(
+            'username_member'   => $username,
+            'password_member'   => password_hash($password, PASSWORD_DEFAULT),
+            'nama_member'       => $name,
+            'email_member'      => $email,
+        );
+        $this->model->insertData('member', $data);
+
+        $this->session->set_userdata('bbcourse_username_member', $username);
+        $return['type'] = 'success';
+        echo json_encode($return);
     }
 
     public function gantiPassword() {
@@ -78,5 +169,12 @@ class Credential extends CI_Controller {
     public function logout() {
         session_destroy();
         redirect(base_url('member'));
+    }
+
+    private function isLogin() {
+        if($this->session->bbcourse_username_member != '')
+            return true;
+        else 
+            return false;
     }
 }
