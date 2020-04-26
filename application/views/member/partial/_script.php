@@ -96,7 +96,7 @@
                 </div>
                 <div class="card-footer clearfix">
                     <span class="float-left" id="price"></span>
-                    <a href="" class="btn btn-sm btn-primary float-right" id="action"></a>
+                    <a href="" class="btn btn-sm btn-success float-right" id="action"></a>
                 </div>
             </div>
         </div>

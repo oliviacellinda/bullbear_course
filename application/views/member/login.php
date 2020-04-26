@@ -49,7 +49,7 @@
                     </div>
                 </form>
                 <div class="text-center mb-3">
-                    <button id="btnLogin" class="btn btn-block btn-primary">Sign In</button>
+                    <button id="btnLogin" class="btn btn-block btn-success">Sign In</button>
                 </div>
                 <div class="text-center">
                     <h6 class="divider">OR</h6>

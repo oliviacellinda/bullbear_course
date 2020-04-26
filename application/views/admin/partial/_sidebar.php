@@ -1,6 +1,6 @@
-        <aside class="main-sidebar sidebar-dark-primary elevation-4">
-            <a href="<?=base_url('admin/user');?>" class="brand-link">
-                <img src="<?=base_url('assets/images/logo-mini.png');?>"
+        <aside class="main-sidebar sidebar-dark-success elevation-4">
+            <a href="<?=base_url('admin/member');?>" class="brand-link">
+                <img src="<?=base_url('assets/images/logo-mini3.png');?>"
                      alt="BullBear Logo"
                      class="brand-image">
                 <span class="brand-text font-weight-light">Bullbear Course</span>

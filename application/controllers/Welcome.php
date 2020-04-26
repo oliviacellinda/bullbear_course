@@ -20,6 +20,7 @@ class Welcome extends CI_Controller {
 	 */
 	public function index()
 	{
-		redirect(base_url('member'));
+		// redirect(base_url('member'));
+		$this->load->view('member/landing');
 	}
 }

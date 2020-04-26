@@ -1,4 +1,4 @@
-        <nav class="main-header navbar navbar-expand-md navbar-dark navbar-primary">
+        <nav class="main-header navbar navbar-expand-md navbar-dark navbar-success">
             <div class="container">
                 <a href="<?=base_url('member/home');?>" class="navbar-brand">
                     <span class="brand-text">Bullbear Course</span>

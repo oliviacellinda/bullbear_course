@@ -33,9 +33,9 @@
                                     <?php if($is_pending) : ?>
                                         <p><em>Pending payment. Please wait while we are processing your payment.</em></p>
                                     <?php else : ?>
-                                        <button id="btnGateway" class="btn btn-primary">Buy and pay with Midtrans</button>
+                                        <button id="btnGateway" class="btn btn-success">Buy and pay with Midtrans</button>
                                         <a href="http://<?=$video['link_video'];?>" target="_blank" rel="noopener noreferrer">
-                                            <button id="btnOutside" class="btn btn-primary mt-1 mt-md-0">Buy from Tokopedia</button>
+                                            <button id="btnOutside" class="btn btn-success mt-1 mt-md-0">Buy from Tokopedia</button>
                                         </a>
                                     <?php endif; ?>
                                 </div>
