@@ -92,8 +92,8 @@
                 columnDefs: [
                     { targets: 0, width: '130px', render: function(data, type, row) {
                             if(moment(data).isValid()) {
-                                let date = moment(data, 'YYYY-MM-DD HH:mm:ss', 'id').format('D MMMM YYYY, ');
-                                let time = moment(data, 'YYYY-MM-DD HH:mm:ss', 'id').format('HH:mm');
+                                let date = moment(data, 'YYYY-MM-DD HH:mm:ss').format('D MMMM YYYY, ');
+                                let time = moment(data, 'YYYY-MM-DD HH:mm:ss').format('HH:mm');
                                 return '<span style="white-space: nowrap;">' + date + '</span>\n' + time;
                             }
                             else
