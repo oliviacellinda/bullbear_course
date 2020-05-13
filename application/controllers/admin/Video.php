@@ -155,6 +155,53 @@ class Video extends CI_Controller {
         }
     }
 
+    public function deletePaket() {
+        if(!$this->isLogin()) {
+            echo json_encode('User not authorized');
+            die();
+        }
+
+        $id = preg_replace('/[^0-9]/', '', $this->input->post('id'));
+        $where = array('id_video_paket' => $id);
+        $informasi_video = $this->model->getDataWhere('video_paket', $where);
+        $isi_video = $this->model->getAllDataWhere('video_isi', $where);
+
+        if($informasi_video == '') {
+            $return['type'] = 'error';
+            $return['message'] = 'Data tidak ditemukan.';
+            echo json_encode($return);
+            die();
+        }
+
+        try {
+            $path = './course/content/' . $informasi_video['id_video_paket'] . '/';
+            $files = glob($path . '*', GLOB_MARK);
+            foreach ($files as $file) {
+                unlink($file);
+            }
+            rmdir($path);
+            $this->model->deleteData('video_isi', $where);
+
+            $path = './course/thumbnail/' . $informasi_video['thumbnail_paket'];
+            if( file_exists($path) ) {
+                unlink($path);
+                $this->model->deleteData('video_paket', $where);
+                
+                $return['type'] = 'success';
+                $return['message'] = 'Berhasil menghapus data.';
+                echo json_encode($return);
+            }
+            else {
+                throw new Exception('error');
+            }
+
+        } catch (Exception $e) {
+            $return['type'] = 'error';
+            $return['message'] = 'Gagal menghapus data.';
+            echo json_encode($return);
+        }
+    }
+
     public function addContent() {
         if(!$this->isLogin()) {
             echo json_encode('User not authorized');

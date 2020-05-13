@@ -52,7 +52,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="link">Link</label>
+                                <label for="link">Link Tokopedia</label>
                                 <input type="text" class="form-control" id="link" autocomplete="off">
                                 <div class="invalid-feedback">Link harus diisi</div>
                             </div>

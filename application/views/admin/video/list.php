@@ -114,7 +114,39 @@
                 ],
             });
 
-            
+            $('#tableVideo').on('click', '#btnHapus', function() {
+                if( confirm('Apakah Anda yakin ingin menghapus paket video ini?') ) {
+                    let tr = $(this).parents('tr');
+                    let row = tabel.row(tr).data();
+                    let id = row.menu;
+
+                    $.ajax({
+                        type    : 'post',
+                        url     : '<?=base_url('admin/video/deletePaket');?>',
+                        dataType: 'json',
+                        data    : { id : id },
+                        beforeSend: function() {
+                            loading('.card');
+                        },
+                        success : function(response) {
+                            if(!jQuery.isPlainObject(response)) {
+                                window.location = '<?=base_url('admin');?>';
+                            }
+                            else {
+                                showAlert(response);
+                            }
+                        },
+                        error   : function(e) {
+                            toastr.error('Gagal menghapus data.', 'Error!');
+                        },
+                        complete: function() {
+                            tabel.ajax.reload(null, false);
+                            removeLoading('.card');
+                        }
+                    });
+                }
+            });
+
         });
     </script>
 </body>
