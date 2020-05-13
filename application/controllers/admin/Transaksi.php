@@ -71,7 +71,7 @@ class Transaksi extends CI_Controller {
             die();
         }
 
-        $where = array('id_video_paket' => $transaksi['id_paket']);
+        $where = array('id_video_paket' => $transaksi['id_video_paket']);
         $paket = $this->model->getDataWhere('video_paket', $where);
 
         $where = array('username_member' => $transaksi['username_member']);
@@ -122,7 +122,7 @@ class Transaksi extends CI_Controller {
             $data = array(
                 'invoice'           => "bbcourse_$username" . "_" . $paket . "_" . date('YmdHis'),
                 'username_member'   => $username,
-                'id_paket'          => $paket,
+                'id_video_paket'    => $paket,
                 'tanggal_transaksi' => date('Y-m-d H:i:s'),
                 'tanggal_verifikasi'=> date('Y-m-d H:i:s'),
                 'status_verifikasi' => 'verified',

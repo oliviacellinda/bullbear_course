@@ -168,7 +168,7 @@
                                 showAlert(response);
                             }
                         },
-                        error   : function(e) { console.log(e.responseText);
+                        error   : function(e) {
                             scrollToTop();
                             toastr.error('Gagal menyimpan data.', 'Error!');
                         },
