@@ -93,11 +93,13 @@ class Transaksi extends CI_Controller {
         $username = preg_replace('/[^a-zA-Z0-9]/', '', $this->input->post('username'));
         $paket = preg_replace('/[^0-9]/', '', $this->input->post('paket'));
 
-        $where = array('username_member' => $username);
-        $member = $this->model->getDataWhere('member', $where);
+        $member = $this->model->getDataWhere('member', ['username_member' => $username]);
+        $video_paket = $this->model->getDataWhere('video_paket', ['id_video_paket' => $paket]);
 
-        $where = array('id_video_paket' => $paket);
-        $video_paket = $this->model->getDataWhere('video_paket', $where);
+        $where = array(
+            'username_member'   => $username,
+            'id_video_paket'    => $paket,
+        );
         $member_paket = $this->model->getDataWhere('member_paket', $where);
 
         if($member == '') {
