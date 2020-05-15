@@ -55,7 +55,16 @@ function loadCourse(sort = 'asc', search = '', is_owner = false) {
 function filterContent() {
     let sort = $('#btnFilter').data('sort');
     let search = $('#search').val().trim();
-    loadCourse(sort, search, false);
+
+    let url = window.location.href;
+    url = url.split('/');
+
+    if(url.findIndex(arr => arr === 'home') !== -1) {
+        loadCourse(sort, search, false);
+    }
+    else if(url.findIndex(arr => arr === 'video') !== -1) {
+        loadCourse(sort, search, true);    
+    }
 }
 
 $('#btnFilter .dropdown-item').click(function() {
