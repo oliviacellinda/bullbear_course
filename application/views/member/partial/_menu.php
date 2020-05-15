@@ -18,7 +18,7 @@
                             <div class="input-group">
                                 <input type="text" class="form-control" name="search" id="search" placeholder="Search for courses..." autocomplete="off">
                                 <div class="input-group-append">
-                                    <button class="btn btn-dark">Go</button>
+                                    <button id="btnSearch" class="btn btn-dark">Go</button>
                                 </div>
                             </div>
                         </div>

@@ -37,7 +37,7 @@
 
     <script>
         $(document).ready(function() {
-            loadCourse('asc', '', false);
+            loadCourse('latest', '', false);
         });
     </script>
 </body>
