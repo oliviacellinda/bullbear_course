@@ -53,7 +53,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="link">Link Tokopedia</label>
-                                <input type="text" class="form-control" id="link" autocomplete="off">
+                                <input type="text" class="form-control" id="link" autocomplete="off" placeholder="Masukkan link dengan format http://www.example.com">
                                 <div class="invalid-feedback">Link harus diisi</div>
                             </div>
                             <div class="form-group">
@@ -140,7 +140,7 @@
                                 showAlert(response);
                             }
                         },
-                        error   : function(e) { console.log(e.responseText);
+                        error   : function(e) {
                             scrollToTop();
                             toastr.error('Gagal menyimpan data.', 'Error!');
                         },

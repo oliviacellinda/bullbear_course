@@ -416,6 +416,11 @@ class Video extends CI_Controller {
             }
         }
 
+        $parsed_url = parse_url($link);
+        $new_link = (isset($parsed_url['scheme'])) ? $parsed_url['scheme'].'://' : 'http://';
+        $new_link .= (isset($parsed_url['host'])) ? $parsed_url['host'].$parsed_url['path'] : $parsed_url['path'];
+        $new_link .= (isset($parsed_url['query'])) ? '?'.$parsed_url['query'] : '';
+
         $return['type'] = 'success';
         $return['data'] = array(
             'nama_paket'        => $nama,
@@ -424,7 +429,7 @@ class Video extends CI_Controller {
             'harga_paket'       => $harga,
             'thumbnail_paket'   => $thumbnail,
             'tanggal_dibuat'    => date('Y-m-d H:i:s'),
-            'link_video'        => $link,
+            'link_video'        => $new_link,
         );
         return $return;
     }
