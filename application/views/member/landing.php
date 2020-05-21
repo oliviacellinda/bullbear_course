@@ -6,24 +6,49 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Bullbear Course</title>
 
+    <link href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" rel="stylesheet">
     <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" crossorigin="anonymous"></script>
-    <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic" rel="stylesheet" type="text/css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" rel="stylesheet" />
     <link href="<?=base_url('assets/creative/css/styles.css');?>" rel="stylesheet" />
+    <link href="<?=base_url('assets/Source_Sans_Pro/font.css');?>" rel="stylesheet" />
+
+    <style>
+        .btn-with-arrow {
+            width: 200px !important;
+            padding-left: 43px;
+            transition: 1s;
+        }
+        .btn-with-arrow:hover {
+            padding-left: 30px;
+        }
+        .btn-with-arrow:after {
+            font-family: "Font Awesome 5 Free";
+            content: "\f061";
+            opacity: 0;
+            position: relative;
+            right: -30px;
+            transition: 1s;
+        }
+        .btn-with-arrow:hover:after {
+            opacity: 1;
+            right: -15px;
+        }
+    </style>
 </head>
 
 <body id="page-top">
 
     <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
         <div class="container">
-            <a class="navbar-brand js-scroll-trigger" href="#page-top">Bullbear Course</a><button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <a class="navbar-brand js-scroll-trigger" href="#page-top">Bullbear Course</a>
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ml-auto my-2 my-lg-0">
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#about">About</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#services">Services</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#portfolio">Portfolio</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#contact">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#about">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#portfolio">Our Best Selection</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#contact">Our Contact</a></li>
                 </ul>
             </div>
         </div>
@@ -37,119 +62,99 @@
                     <hr class="divider my-4">
                 </div>
                 <div class="col-lg-8 align-self-baseline">
-                    <p class="text-white-75 font-weight-light mb-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                    <a href="<?=base_url('member');?>" class="btn btn-success btn-xl">Continue</a>
+                    <p class="text-white-75 mb-5">Di Bullbear Course, kami berkomitmen untuk memberikan course trading terbaik.</p>
+                    <a href="<?=base_url('member');?>" class="btn btn-success btn-xl btn-with-arrow">Continue</a>
                 </div>
             </div>
         </div>
     </header>
 
-    <section class="page-section bg-success" id="about">
+    <section class="page-section" id="about">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-lg-8 text-center">
-                    <h2 class="text-white mt-0">We've got what you need!</h2>
-                    <hr class="divider light my-4" />
-                    <p class="text-white-75 mb-4">Start Bootstrap has everything you need to get your new website up and running in no time! Choose one of our open source, free to download, and easy to use themes! No strings attached!</p>
-                    <a class="btn btn-light btn-xl js-scroll-trigger" href="#services">Get Started!</a>
+                <div class="col-lg-10 text-center">
+                    <h2 class="mt-0">About Us</h2>
+                    <hr class="divider my-4" />
+                    <p class="text-muted mb-5">Bullbear Course menyediakan materi dan konsultasi trading bagi Anda yang masih pemula maupun yang telah memiliki pengalaman sebelumnya. Temukan berbagai pilihan materi trading, mulai dari pengenalan stock trading, teknik analisis dasar, hingga teknik analisis lanjut untuk investasi harian.</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mt-5 d-flex">
+                        <i class="fas fa-4x fa-user-plus text-success mt-2 mb-4 mr-3"></i>
+                        <div>
+                            <h3 class="h4 mb-2">Proses Registrasi Mudah</h3>
+                            <p class="text-muted mt-3 mb-0">Cukup dengan menyelesaikan formulir registrasi, Anda dapat memperoleh akses daftar berbagai materi trading.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mt-5 d-flex">
+                        <div class="fa-4x text-success mr-3">
+                            <span class="fa-layers fa-fw">
+                                <i class="fas fa-scroll"></i>
+                                <i class="fas fa-star fa-inverse" data-fa-transform="shrink-13 up-5"></i>
+                                <i class="fas fa-grip-lines fa-inverse font-weight-light" data-fa-transform="shrink-7"></i>
+                            </span>
+                        </div>
+                        <div>
+                            <h3 class="h4 mb-2">Materi Berkualitas</h3>
+                            <p class="text-muted mt-3 mb-0">Pilihan materi yang luas dan dibahas secara mendalam akan membantu Anda memahami materi yang Anda cari dengan cepat.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mt-5 d-flex">
+                        <div class="fa-4x text-success mr-3">
+                            <span class="fa-layers fa-fw">
+                                <i class="fas fa-book-open" data-fa-transform="shrink-5 up-5"></i>
+                                <i class="fas fa-hand-pointer" data-fa-transform="shrink-8 down-5"></i>
+                            </span>
+                        </div>
+                        <div>
+                            <h3 class="h4 mb-2">Akses Tak Terbatas</h3>
+                            <p class="text-muted mt-3 mb-0">Materi yang telah Anda peroleh akan menjadi milik Anda selamanya dan dapat Anda akses 24/7.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mt-5 d-flex">
+                        <i class="fas fa-4x fa-phone-alt text-success mt-2 mb-4 mr-3"></i>
+                        <div>
+                            <h3 class="h4 mb-2">Layanan Konsultasi</h3>
+                            <p class="text-muted mt-3 mb-0">Kesulitan dalam memahami materi? Kami memberikan layanan konsultasi bagi Anda yang membutuhkan penjelasan lebih mendalam.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="page-section" id="services">
+    <section id="portfolio" class="page-section bg-light">
         <div class="container">
-            <h2 class="text-center mt-0">At Your Service</h2>
+            <h2 class="text-center mt-0">Our Best Selection</h2>
             <hr class="divider my-4" />
             <div class="row">
-                <div class="col-lg-3 col-md-6 text-center">
-                    <div class="mt-5">
-                        <i class="fas fa-4x fa-gem text-success mb-4"></i>
-                        <h3 class="h4 mb-2">Sturdy Themes</h3>
-                        <p class="text-muted mb-0">Our themes are updated regularly to keep them bug free!</p>
+                <div class="col-sm-4">
+                    <img class="card-img-top" src="<?=base_url('assets/creative/assets/img/portfolio/fullsize/1.jpg');?>" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6 text-center">
-                    <div class="mt-5">
-                        <i class="fas fa-4x fa-laptop-code text-success mb-4"></i>
-                        <h3 class="h4 mb-2">Up to Date</h3>
-                        <p class="text-muted mb-0">All dependencies are kept current to keep things fresh.</p>
+                <div class="col-sm-4">
+                    <img class="card-img-top" src="<?=base_url('assets/creative/assets/img/portfolio/fullsize/2.jpg');?>" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6 text-center">
-                    <div class="mt-5">
-                        <i class="fas fa-4x fa-globe text-success mb-4"></i>
-                        <h3 class="h4 mb-2">Ready to Publish</h3>
-                        <p class="text-muted mb-0">You can use this design as is, or you can make changes!</p>
+                <div class="col-sm-4">
+                    <img class="card-img-top" src="<?=base_url('assets/creative/assets/img/portfolio/fullsize/3.jpg');?>" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                     </div>
-                </div>
-                <div class="col-lg-3 col-md-6 text-center">
-                    <div class="mt-5">
-                        <i class="fas fa-4x fa-heart text-success mb-4"></i>
-                        <h3 class="h4 mb-2">Made with Love</h3>
-                        <p class="text-muted mb-0">Is it really open source if it's not made with love?</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="portfolio">
-        <div class="container-fluid p-0">
-            <div class="row no-gutters">
-                <div class="col-lg-4 col-sm-6">
-                    <a class="portfolio-box" href="<?=base_url('assets/creative/assets/img/portfolio/fullsize/1.jpg');?>"
-                        ><img class="img-fluid" src="<?=base_url('assets/creative/assets/img/portfolio/thumbnails/1.j');?>pg" alt="" />
-                        <div class="portfolio-box-caption">
-                            <div class="project-category text-white-50">Category</div>
-                            <div class="project-name">Project Name</div>
-                        </div></a
-                    >
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <a class="portfolio-box" href="<?=base_url('assets/creative/assets/img/portfolio/fullsize/2.jpg');?>"
-                        ><img class="img-fluid" src="<?=base_url('assets/creative/assets/img/portfolio/thumbnails/2.j');?>pg" alt="" />
-                        <div class="portfolio-box-caption">
-                            <div class="project-category text-white-50">Category</div>
-                            <div class="project-name">Project Name</div>
-                        </div></a
-                    >
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <a class="portfolio-box" href="<?=base_url('assets/creative/assets/img/portfolio/fullsize/3.jpg');?>"
-                        ><img class="img-fluid" src="<?=base_url('assets/creative/assets/img/portfolio/thumbnails/3.j');?>pg" alt="" />
-                        <div class="portfolio-box-caption">
-                            <div class="project-category text-white-50">Category</div>
-                            <div class="project-name">Project Name</div>
-                        </div></a
-                    >
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <a class="portfolio-box" href="<?=base_url('assets/creative/assets/img/portfolio/fullsize/4.jpg');?>"
-                        ><img class="img-fluid" src="<?=base_url('assets/creative/assets/img/portfolio/thumbnails/4.j');?>pg" alt="" />
-                        <div class="portfolio-box-caption">
-                            <div class="project-category text-white-50">Category</div>
-                            <div class="project-name">Project Name</div>
-                        </div></a
-                    >
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <a class="portfolio-box" href="<?=base_url('assets/creative/assets/img/portfolio/fullsize/5.jpg');?>"
-                        ><img class="img-fluid" src="<?=base_url('assets/creative/assets/img/portfolio/thumbnails/5.j');?>pg" alt="" />
-                        <div class="portfolio-box-caption">
-                            <div class="project-category text-white-50">Category</div>
-                            <div class="project-name">Project Name</div>
-                        </div></a
-                    >
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <a class="portfolio-box" href="<?=base_url('assets/creative/assets/img/portfolio/fullsize/6.jpg');?>"
-                        ><img class="img-fluid" src="<?=base_url('assets/creative/assets/img/portfolio/thumbnails/6.j');?>pg" alt="" />
-                        <div class="portfolio-box-caption p-3">
-                            <div class="project-category text-white-75">Category</div>
-                            <div class="project-name">Project Name</div>
-                        </div></a
-                    >
                 </div>
             </div>
         </div>
@@ -158,10 +163,10 @@
     <section class="page-section" id="contact">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-lg-8 text-center">
-                    <h2 class="mt-0">Let's Get In Touch!</h2>
+                <div class="col-lg-10 text-center">
+                    <h2 class="mt-0">Our Contact</h2>
                     <hr class="divider my-4" />
-                    <p class="text-muted mb-5">Ready to start your next project with us? Give us a call or send us an email and we will get back to you as soon as possible!</p>
+                    <p class="text-muted mb-5">Untuk konsultasi materi dan informasi lebih lanjut, hubungi kami atau kirimkan pertanyaan Anda ke kontak kami di bawah ini.</p>
                 </div>
             </div>
             <div class="row">
@@ -178,7 +183,9 @@
     </section>
 
     <footer class="bg-light py-5">
-        <div class="container"><div class="small text-center text-muted">Copyright © 2020 - Bullbear Course</div></div>
+        <div class="container">
+            <div class="small text-center text-muted">Copyright © 2020 - Bullbear Course</div>
+        </div>
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
